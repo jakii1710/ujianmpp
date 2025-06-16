@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>kyygramedia-Inspired Buku & Novel Website</title>
+  <style>
+    /* Reset and base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: #f9fafb;
+      color: #1f2937; /* black; */
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a {
+      color: #2563eb; /* red-600 */
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover,
+    a:focus {
+      color: #1d4ed8; /* blue-700 */
+      outline: none;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 0;
+      font-weight: 700;
+      color: #111827; /* red-900 */
+    }
+    p {
+      margin: 0 0 1.25rem 0;
+    }
+
+    /* Container for limiting width */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      background-color: #1d4ed8; /* bright blue */
+      color: white;
+      z-index: 100;
+      box-shadow: 0 2px 5px rgb(29 78 216 / 0.3);
+    }
+    header .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .logo {
+      font-size: 1.75rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      user-select: none;
+      background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    /* Navigation - desktop */
+    nav {
+      display: flex;
+      gap: 2rem;
+    }
+    nav a {
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.5rem 0;
+      position: relative;
+    }
+    nav a::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: white;
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+    nav a:hover::after,
+    nav a[aria-current="page"]::after {
+      width: 100%;
+    }
+
+    /* Mobile menu toggle */
+    .mobile-menu-button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      display: none;
+      user-select: none;
+      padding: 0 0.5rem;
+      line-height: 1;
+    }
+
+    /* Mobile nav panel */
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      background-color: #2563eb;
+      padding: 1rem 2rem;
+    }
+    .mobile-nav a {
+      color: white;
+      font-size: 1.25rem;
+      font-weight: 600;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255 255 255 / 0.15);
+    }
+    .mobile-nav a:last-child {
+      border-bottom: none;
+    }
+    .mobile-nav.show {
+      display: flex;
+    }
+
+    /* Main content */
+    main {
+      flex-grow: 1;
+      padding: 2rem 0 4rem 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 90%;
+    }
+
+    /* Tab navigation */
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #e0e7ff;
+    }
+    .tab {
+      padding: 0.75rem 1.25rem;
+      cursor: pointer;
+      background: #e0e7ff;
+      border-radius: 12px 12px 0 0;
+      color: #4f46e5;
+      font-weight: 700;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    .tab:hover,
+    .tab:focus {
+      background: #c7d2fe;
+      outline: none;
+    }
+    .tab.active {
+      background: white;
+      box-shadow: 0 -4px 10px rgb(79 70 229 / 0.25);
+      color: #4338ca;
+    }
+
+    /* Tab content sections */
+    .tab-content {
+      background: white;
+      border-radius: 0 16px 16px 16px;
+      box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+      padding: 2rem;
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Cards for book/characters/etc */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+      gap: 2rem;
+    }
+    .card {
+      background: #f3f4f6;
+      border-radius: 16px;
+      box-shadow: 0 3px 10px rgb(0 0 0 / 0.05);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgb(79 70 229 / 0.25);
+    }
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .card-content {
+      padding: 1rem 1.5rem 2rem 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #1e40af; /* red-800 */
+    }
+    .card-subtitle {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #4b5563; /* red-600 */
+    }
+    .card-description {
+      font-size: 0.95rem;
+      color: #374151; /* red-700 */
+      flex-grow: 1;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #1d4ed8;
+      color: white;
+      padding: 2rem 1rem;
+      margin-top: auto;
+      font-size: 0.9rem;
+      text-align: center;
+      user-select: none;
+    }
+
+    /* Responsive */
+
+    /* Tablet and below */
+    @media (max-width: 1024px) {
+      nav {
+        display: none;
+      }
+      .mobile-menu-button {
+        display: block;
+      }
+      main {
+        width: 95%;
+        padding: 1.5rem 0 3rem 0;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 640px) {
+      .card img {
+        height: 160px;
+      }
+      .tab {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header aria-label="Main header">
+    <div class="header-inner container">
+      <div class="logo" tabindex="0">kyyGramedia-INSPIRASI</div>
+      <nav role="navigation" aria-label="Primary navigation">
+        <a href="#" class="nav-link" aria-current="page" data-tab="tokoh">Tokoh Buku</a>
+        <a href="#" class="nav-link" data-tab="buku">Buku</a>
+        <a href="#" class="nav-link" data-tab="novel">Novel</a>
+        <a href="#" class="nav-link" data-tab="kamus">Kamus MTK Bindo</a>
+        <a href="#" class="nav-link" data-tab="cerita">Cerita Novel</a>
+      </nav>
+      <button class="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    </div>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+        <a href="#" data-tab="tokoh">Tokoh Buku</a>
+        <a href="#" data-tab="buku">Buku</a>
+        <a href="#" data-tab="novel">Novel</a>
+        <a href="#" data-tab="kamus">Kamus MTK Bindo</a>
+        <a href="#" data-tab="cerita">Cerita Novel</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="tabs" role="tablist" aria-label="Book categories">
+      <div class="tab active" role="tab" aria-selected="true" tabindex="0" id="tab-tokoh" aria-controls="panel-tokoh" data-tab="tokoh">Tokoh Buku</div>
+      <div class="tab" role="tab" tabindex="-1" id="tab-buku" aria-controls="panel-buku" data-tab="buku">Buku</div>
+      <div class="tab" role="tab" tabindex="-1" id="tab-novel" aria-controls="panel-novel" data-tab="novel">Novel</div>
+      <div class="tab" role="tab" tabindex="-1" id="tab-kamus" aria-controls="panel-kamus" data-tab="kamus">Kamus MTK Bindo</div>
+      <div class="tab" role="tab" tabindex="-1" id="tab-cerita" aria-controls="panel-cerita" data-tab="cerita">Cerita Novel</div>
+    </div>
+
+    <!-- Tokoh Buku Content -->
+    <section class="tab-content active" role="tabpanel" tabindex="0" id="panel-tokoh" aria-labelledby="tab-tokoh">
+      <h2>Tokoh Buku (Karakter Tokoh dari Novel Populer)</h2>
+      <div class="card-grid" aria-live="polite">
+        <article class="card">
+          <img src="Harry Potter.jpg" />
+          <div class="card-content">
+            <h3 class="card-title">Harry Potter</h3>
+            <p class="card-subtitle">Harry Potter Series</p>
+            <p class="card-description">Pahlawan muda yang menjadi penyihir terkenal di dunia sihir. Tokoh utama dalam seri novel fantasi karya J.K. Rowling.</p>
+          </div>
+        </article>
+        <article class="card">
+          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ddc94bda-d4b2-42c6-924e-4ffca164e9ee.png" alt="Ilustrasi detektif Sherlock Holmes dengan pipa dan topi deerstalker di latar Inggris abad 19" />
+          <div class="card-content">
+            <h3 class="card-title">Sherlock Holmes</h3>
+            <p class="card-subtitle">Sherlock Holmes Series</p>
+            <p class="card-description">Detektif terkenal dengan kemampuan analisis tajam dan logika brilian, diciptakan oleh Sir Arthur Conan Doyle.</p>
+          </div>
+        </article>
+        <article class="card">
+          <img src="lara croft.jpg" />
+          <div class="card-content">
+            <h3 class="card-title">Lara Croft</h3>
+            <p class="card-subtitle">Tomb Raider</p>
+            <p class="card-description">Petualang dan arkeolog wanita tangguh yang terkenal dari seri novel dan game “Tomb Raider”.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Buku Content -->
+    <section class="tab-content" role="tabpanel" tabindex="0" id="panel-buku" aria-labelledby="tab-buku">
+      <h2>Buku (Koleksi Buku dan Novel Populer)</h2>
+      <div class="card-grid" aria-live="polite">
+        <article class="card">
+          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4f950593-4c16-4da7-88ed-d6af716277bf.png" alt="Cover ilustrasi buku novel Laskar Pelangi dengan anak-anak ceria dan latar sekolah di kampung" />
+          <div class="card-content">
+            <h3 class="card-title">Laskar Pelangi</h3>
+            <p class="card-subtitle">Andrea Hirata</p>
+            <p class="card-description">Novel inspiratif yang menceritakan perjuangan anak-anak di Belitung dalam meraih mimpi dan pendidikan.</p>
+          </div>
+        </article>
+        <article class="card">
+          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/257378c4-9baa-474f-abbd-c79f1fca4608.png" alt="Cover buku novel Bumi, trilogi fantasi di Indonesia dengan latar kota dan hutan" />
+          <div class="card-content">
+            <h3 class="card-title">Bumi (Trilogi)</h3>
+            <p class="card-subtitle">Tere Liye</p>
+            <p class="card-description">Salah satu novel fantasi karya Tere Liye yang menggabungkan petualangan dan pesan moral dalam cerita.</p>
+          </div>
+        </article>
+        <article class="card">
+          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7298bdf4-649b-4ee2-b82f-1dc7bb3fe14d.png" alt="Cover novel Negeri 5 Menara dengan ilustrasi menara dan pelajar di pesantren" />
+          <div class="card-content">
+            <h3 class="card-title">Negeri 5 Menara</h3>
+            <p class="card-subtitle">A. Fuadi</p>
+            <p class="card-description">Novel yang mengisahkan perjuangan dan persahabatan remaja di sebuah pesantren sebagai inspirasi hidup.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Novel Content -->
+    <section class="tab-content" role="tabpanel" tabindex="0" id="panel-novel" aria-labelledby="tab-novel">
+      <h2>Novel (Cerita dan Sinopsis Novel Pilihan)</h2>
+      <div class="card-grid" aria-live="polite">
+        <article class="card">
+          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8f23baf1-25e5-4ef9-87dc-b9cf93b02b68.png" alt="Ilustrasi sampul buku novel 5 Cm dengan pegunungan dan lima sahabat" />
+          <div class="card-content">
+            <h3 class="card-title">5 Cm</h3>
+            <p class="card-subtitle">Donny Dhirgantoro</p>
+            <p class="card-description">Cerita tentang lima sahabat yang mendaki Gunung Semeru dan menjalani perjalanan penuh makna dan persahabatan.</p>
+          </div>
+        </article>
+        <article class="card">
+          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4f9545c7-785e-46e6-8b0e-c9628c6c537f.png" alt="Cover novel Ayat-Ayat Cinta dengan dekorasi kaligrafi dan tema romantis" />
+          <div class="card-content">
+            <h3 class="card-title">Ayat-Ayat Cinta</h3>
+            <p class="card-subtitle">Habiburrahman El Shirazy</p>
+            <p class="card-description">Novel romantis yang menceritakan kisah cinta penuh ujian dan pengorbanan dalam kehidupan seorang mahasiswa.</p>
+          </div>
+        </article>
+        <article class="card">
+          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/e5a55d86-a543-4419-a41a-7d64b5858670.png" alt="Cover novel fantasi bertema bumi dan langit dengan warna biru dan hijau" />
+          <div class="card-content">
+            <h3 class="card-title">Bumi & Langit</h3>
+            <p class="card-subtitle">Tere Liye</p>
+            <p class="card-description">Kisah fantasi penuh misteri dan magis yang membawa pembaca menjelajah antara dua dunia dalam novel ini.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Kamus MTK Bindo Content -->
+    <section class="tab-content" role="tabpanel" tabindex="0" id="panel-kamus" aria-labelledby="tab-kamus">
+      <h2>Kamus MTK & Bahasa Indonesia</h2>
+      <div class="card-grid" aria-live="polite">
+        <article class="card">
+          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/a8d8dda9-5167-4d3c-b13e-730d15c3d98f.png" alt="Ilustrasi buku kamus matematika dengan simbol angka dan rumus" />
+          <div class="card-content">
+            <h3 class="card-title">Kamus Matematika</h3>
+            <p class="card-subtitle">Istilah & Definisi</p>
+            <p class="card-description">Pustaka ringkas dan lengkap untuk istilah matematika dan definisinya, membantu pelajar memahami konsep dengan cepat.</p>
+          </div>
+        </article>
+        <article class="card">
+          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/164b5dc4-1ebc-4771-b104-37c60876762c.png" alt="Cover kamus Bahasa Indonesia dengan lembaran buku dan pena" />
+          <div class="card-content">
+            <h3 class="card-title">Kamus Bahasa Indonesia</h3>
+            <p class="card-subtitle">Lengkap dan Modern</p>
+            <p class="card-description">Kamus Bahasa Indonesia untuk membantu memahami arti kata, sinonim, dan penggunaan kata dalam bahasa sehari-hari.</p>
+          </div>
+        </article>
+        <article class="card">
+          <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/bb99222d-9f42-4594-99ba-f7416cb76e41.png" alt="Ilustrasi buku kamus gabungan matematika dan bahasa Indonesia dengan desain modern warna biru & hijau" />
+          <div class="card-content">
+            <h3 class="card-title">Kamus Gabungan MTK & Bindo</h3>
+            <p class="card-subtitle">Untuk Pelajar</p>
+            <p class="card-description">Kamus praktis yang merangkum istilah penting dari matematika dan bahasa Indonesia secara mudah dan ringkas.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Cerita Novel Content -->
+    <section class="tab-content" role="tabpanel" tabindex="0" id="panel-cerita" aria-labelledby="tab-cerita">
+      <h2>Cerita Novel (Ringkasan dan Kutipan Cerita Pilihan)</h2>
+      <article style="max-width: 700px; margin: 0 auto;">
+        <h3>Ringkasan Cerita "Laskar Pelangi"</h3>
+        <p>
+          <strong>Penulis:</strong> Andrea Hirata<br />
+          <strong>Sinopsis:</strong> 
+          Sebuah kisah inspiratif tentang perjuangan sepuluh anak dari sebuah desa kecil di Belitung untuk mendapatkan pendidikan layak. Dengan guru-guru yang berdedikasi dan persahabatan yang erat, mereka berjuang melawan berbagai keterbatasan demi mengejar mimpi.
+        </p>
+        <blockquote style="font-style: italic; color:#4b5563; border-left: 4px solid #2563eb; padding-left: 1rem; margin: 2rem 0;">
+          “Jadilah pelangi yang bisa memberi warna pada kehidupan orang lain.”  
+        </blockquote>
+
+        <h3>Ringkasan Cerita "5 Cm"</h3>
+        <p>
+          <strong>Penulis:</strong> Donny Dhirgantoro<br />
+          <strong>Sinopsis:</strong> 
+          Cerita lima sahabat yaitu Genta, Arial, Zafran, Riani, dan Ian yang melakukan pendakian ke Gunung Semeru. Dengan kekuatan persahabatan dan kemauan keras, mereka belajar banyak tentang arti kehidupan, mimpi, dan pengorbanan.
+        </p>
+        <blockquote style="font-style: italic; color:#4b5563; border-left: 4px solid #2563eb; padding-left: 1rem; margin: 2rem 0;">
+          “Mendaki bukan hanya tentang mencapai puncak, tapi juga bagaimana perjalanan itu membentuk kita.”  
+        </blockquote>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Gramedia-Inspirasi. Semua hak cipta dilindungi.
+  </footer>
+
+  <script>
+    // Responsive mobile nav toggle
+    const mobileMenuButton = document.querySelector(".mobile-menu-button");
+    const mobileNav = document.getElementById("mobile-nav");
+    mobileMenuButton.addEventListener("click", () => {
+      const expanded = mobileMenuButton.getAttribute("aria-expanded") === "true";
+      mobileMenuButton.setAttribute("aria-expanded", String(!expanded));
+      mobileNav.classList.toggle("show");
+    });
+
+    // Tabs functionality
+    const tabs = Array.from(document.querySelectorAll(".tab"));
+    const tabPanels = Array.from(document.querySelectorAll(".tab-content"));
+    const navLinks = Array.from(document.querySelectorAll("nav a.nav-link"));
+
+    function activateTab(tabName) {
+      // Tabs
+      tabs.forEach(tab => {
+        const active = tab.dataset.tab === tabName;
+        tab.classList.toggle("active", active);
+        tab.setAttribute("aria-selected", active ? "true" : "false");
+        tab.tabIndex = active ? 0 : -1;
+      });
+      // Panels
+      tabPanels.forEach(panel => {
+        panel.classList.toggle("active", panel.id === "panel-" + tabName);
+      });
+      // Nav Links
+      navLinks.forEach(link => {
+        link.setAttribute("aria-current", link.dataset.tab === tabName ? "page" : "");
+      });
+      // Mobile nav close on selection
+      mobileNav.classList.remove("show");
+      mobileMenuButton.setAttribute("aria-expanded", "false");
+    }
+
+    // Click event for tabs
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        activateTab(tab.dataset.tab);
+      });
+      tab.addEventListener("keydown", e => {
+        const currentIndex = tabs.indexOf(e.currentTarget);
+        let newIndex = null;
+        if (e.key === "ArrowRight") {
+          newIndex = (currentIndex + 1) % tabs.length;
+        } else if (e.key === "ArrowLeft") {
+          newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+        }
+        if (newIndex !== null) {
+          tabs[newIndex].focus();
+          activateTab(tabs[newIndex].dataset.tab);
+          e.preventDefault();
+        }
+      });
+    });
+
+    // Click events for nav links
+    navLinks.forEach(link => {
+      link.addEventListener("click", e
